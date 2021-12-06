@@ -1,24 +1,18 @@
 
-def simulate_day(fishes):
-  new_fish_count = 0
-  for i, fish in enumerate(fishes):
-    if fish["age"] == 0:
-      fish["age"] = 6
-      new_fish_count += fish["count"]
-      
-    else:
-      fish["age"] -= 1
+from collections import Counter, deque
 
-  if (new_fish_count):
-    fishes.append({"age": 8, "count": new_fish_count})
+def simulate(input, days):
+  counter = Counter(input)
+  count_by_day = deque([counter[i] or 0 for i in range(9)])
+  for d in range(days):
+     spawning = count_by_day[0]
+     count_by_day.rotate(-1)
+     count_by_day[6] += spawning
+     print(f"after {d+1} days: {sum(count_by_day)}")
+  return count_by_day
 
 with open('input6.txt') as f:
     lines = f.readlines()
     input = list(map(int, lines[0].split(',')))
-    fishes = [{"age": i, "count": 1} for i in input]
-    for d in range(256):
-      simulate_day(fishes)
-      # print(f"after day {d+1}: {fishes}")
-
-    count_fishes = sum(f["count"] for f in fishes)
-    print(f"there are {count_fishes} fishies")
+    result = simulate(input, 256)
+    print(sum(result))
