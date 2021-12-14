@@ -81,5 +81,5 @@ def insert_edge(start, end, adj):
 with open("input.txt") as f:
     lines = [line.rstrip() for line in f.readlines()]
     graph = build_adjacency_list(lines)
-    # part_1(graph)
+    part_1(graph)
     part_2(graph)
