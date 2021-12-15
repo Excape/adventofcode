@@ -1,6 +1,15 @@
 from functools import reduce
 from collections import Counter
+import time
 
+
+def measure(func):
+  def inner(*args, **kwargs):
+    t = time.process_time_ns()
+    func(*args, **kwargs)
+    elapsed_time = time.process_time_ns() - t
+    print(f"Executed in {elapsed_time/10**6} ms")
+  return inner
 
 def parse_input(lines):
     template = lines[0]
@@ -22,11 +31,11 @@ def part_1(template, rules):
     result = counter.most_common()[0][1] - counter.most_common()[-1][1]
     print(f"result: {result}")
 
-
+@measure
 def part_2(template, rules):
     pairs = [f"{p[0]}{p[1]}" for p in zip(template, template[1:])]
     counter = Counter(pairs)
-    n = 40
+    n = 400
     result_counter = reduce(
         lambda c, _: pair_insertion_smart(c, rules), range(n), counter
     )
@@ -80,5 +89,5 @@ def insert_elements(template, inserts):
 with open("input.txt") as f:
     lines = [line.rstrip() for line in f.readlines()]
     template, rules = parse_input(lines)
-    part_1(template, rules)
+    #part_1(template, rules)
     part_2(template, rules)
